@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.entity.Classe;
+import org.example.entity.Etudiant;
 import org.example.interfaces.Repository;
 import org.hibernate.query.Query;
 
@@ -26,12 +27,21 @@ public class ClasseService extends BaseService implements Repository<Classe> {
 
     @Override
     public boolean delete(Classe o) {
-        return false;
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.delete(o);
+        session.getTransaction().commit();
+        session.close();
+        return true;
     }
 
     @Override
     public Classe findById(Long id) {
-        return null;
+        Classe classe = null;
+        session = sessionFactory.openSession();
+        classe = (Classe) session.get(Classe.class, id);
+        session.close();
+        return classe;
     }
 
     @Override
@@ -42,5 +52,15 @@ public class ClasseService extends BaseService implements Repository<Classe> {
         classeList = classeQuery.list();
         session.close();
         return classeList;
+    }
+
+    public List<Etudiant> findAllStudientsByLevel(String level){
+        List<Etudiant> etudiantList = null;
+        session = sessionFactory.openSession();
+        Query<Etudiant> classeQuery = session.createQuery("select etudiantList from Classe where Niveau_classe = :niveau ");
+        classeQuery.setParameter("niveau" , level);
+        etudiantList = classeQuery.list();
+        session.close();
+        return etudiantList;
     }
 }

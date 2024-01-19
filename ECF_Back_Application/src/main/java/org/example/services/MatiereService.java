@@ -26,7 +26,12 @@ public class MatiereService extends BaseService implements Repository<Matiere> {
 
     @Override
     public boolean delete(Matiere o) {
-        return false;
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.delete(o);
+        session.getTransaction().commit();
+        session.close();
+        return true;
     }
 
     @Override

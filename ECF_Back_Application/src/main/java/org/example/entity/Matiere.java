@@ -10,7 +10,7 @@ import java.util.List;
 @Table
 public class Matiere {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_matiere", nullable = false)
     private Long id;
 

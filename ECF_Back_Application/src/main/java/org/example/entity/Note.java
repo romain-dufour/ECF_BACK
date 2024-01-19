@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table
 public class Note {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id_note", nullable = false)
     private Long id;
 

@@ -140,15 +140,30 @@ public class Ihm {
 
     private void creerEnseignant(){
         try{
-        System.out.println("Merci de saisir le nom de l'enseignant : ");
-        String nom_enseignant = scanner.nextLine();
+            String nom_enseignant;
+            do {
+                System.out.println("Merci de saisir le nom de l'enseignant (au moins 3 caractères) : ");
+                nom_enseignant = scanner.nextLine();
+            } while (nom_enseignant.length() < 3);
+
         System.out.println("Merci de saisir le prenom de l'enseignant : ");
         String prenom_enseignant = scanner.nextLine();
-        System.out.println("Merci de saisir l'age de l'enseignant : ");
-        int age_enseignant = scanner.nextInt();
+            boolean value = true;
+            int age_enseignant ;
+            do {
+                System.out.println("Merci de saisir l'age de l'enseignant : ");
+                age_enseignant = scanner.nextInt();
+                if (age_enseignant >= 18){
+                    value = true;
+                }else {
+                    value = false;
+                    System.out.println("Vous avez saisi un age inférieur à 18 ans, l'enseignant doit être majeur");
+                }
+            }while (!value);
+
+        scanner.nextLine();
         System.out.println("Merci de saisir le grade de l'enseignant : ");
-        int grade_enseignant = scanner.nextInt();
-        boolean value = true;
+        String grade_enseignant = scanner.nextLine();
         boolean prof_principal = false;
         boolean resp_dept = false;
         do {
@@ -182,6 +197,7 @@ public class Ihm {
                 System.out.println("Saisissez oui : 1, non : 0 ");
             }
         }while (!value);
+            scanner.nextLine();
 
         Enseignant enseignant = new Enseignant(nom_enseignant,prenom_enseignant, age_enseignant, grade_enseignant, prof_principal, resp_dept);
 
@@ -198,19 +214,41 @@ public class Ihm {
 
     private void creerEtudiant(){
         try {
-            System.out.println("Merci de saisir le nom de l'etudiant : ");
-            String nom_etudiant = scanner.nextLine();
+            String nom_etudiant;
+            do {
+                System.out.println("Merci de saisir le nom de l'étudiant (au moins 3 caractères) : ");
+                nom_etudiant = scanner.nextLine();
+            } while (nom_etudiant.length() < 3);
+
+
             System.out.println("Merci de saisir le prenom de l'etudiant : ");
             String prenom_etudiant = scanner.nextLine();
-            System.out.println("Merci de saisir la date de naissance de l'étudiant :(dd/MM/YYYY ");
+            System.out.println("Merci de saisir la date de naissance de l'étudiant :(dd/MM/YYYY) :");
             String date = scanner.nextLine();
 
             Date date_naissane = new SimpleDateFormat("dd/MM/yyyy").parse(date);
 
-            System.out.println("Merci de saisir l'email de l'étudiant (l'email doit finir par @gmail.com:  ");
-            String email_etudiant = scanner.nextLine();
+            String email_etudiant;
+            do {
+                System.out.println("Merci de saisir l'e-mail de l'étudiant (l'e-mail doit finir par @gmail.com) :");
+                email_etudiant = scanner.nextLine();
+            } while (!email_etudiant.endsWith("@gmail.com"));
 
-            Etudiant etudiant = new Etudiant(nom_etudiant,prenom_etudiant,date_naissane,email_etudiant);
+
+            System.out.println("Voici la liste des classes");
+            List<Classe>classeList = classeService.findAll();
+            for (Classe c: classeList
+                 ) {
+                System.out.println("Classe : " + c.toString());
+            }
+
+            System.out.println("Merci de saisir l'id de la classe de l'étudiant:");
+            Long classe_id = scanner.nextLong();
+            scanner.nextLine();
+
+            Classe classe = this.classeService.findById(classe_id);
+
+            Etudiant etudiant = new Etudiant(nom_etudiant,prenom_etudiant,date_naissane,email_etudiant, classe);
 
             if(etudiantService.create(etudiant)) {
                 System.out.println("Etudiant ajouté");
@@ -231,6 +269,7 @@ public class Ihm {
             int duree = scanner.nextInt();
             System.out.println("Merci de saisir le coefficient de la matiere: ");
             int coeff_matiere = scanner.nextInt();
+            scanner.nextLine();
 
             Matiere matiere = new Matiere(intitule_matiere,description_matiere,duree,coeff_matiere);
 
@@ -263,7 +302,7 @@ public class Ihm {
                     System.out.println("Saisissez une note entre 0 et 20 !");
                 }
             }while (value);
-
+            scanner.nextLine();
             System.out.println("Merci de saisir un commentaire de la note : ");
             String commentaire_note = scanner.nextLine();
 
@@ -289,6 +328,7 @@ public class Ihm {
             String niveau_classe = scanner.nextLine();
             System.out.println("Merci de saisir l'id du departement relié a la classe': ");
             Long id_departement = scanner.nextLong();
+            scanner.nextLine();
 
             Departement departement = this.departementService.findById(id_departement);
 
@@ -307,6 +347,7 @@ public class Ihm {
         try {
             System.out.println("Merci de saisir l'id de l'etudiant : ");
             Long id_etudiant = scanner.nextLong();
+            scanner.nextLine();
             System.out.println("Merci de saisir le jour et l'heure:(yyyy-MM-dd HH:mm) ");
             String userInput = scanner.nextLine();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -329,19 +370,104 @@ public class Ihm {
         }
     }
     private void afficherListeClassesSansEleves(){
+        List<Classe>classeList = classeService.findAll();
+        for (Classe c: classeList
+             ) {
+            System.out.println("la classe est : " + c.toString());
+        }
         }
 
-    private void afficherNombreMatiereEleve(){}
+    private void afficherNombreMatiereEleve(){
+        try {
+            System.out.println("Merci de saisir l'id de l'étudiant : ");
+            Long etudiant_id = scanner.nextLong();
+            scanner.nextLine();
+            Etudiant etudiant = this.etudiantService.findById(etudiant_id);
 
-    private void afficherListeNoteEleveAvecDetails(){}
+            List<Matiere> matiereList = null;
+            System.out.println("L'étudiant "+ etudiant.getNom_etudiant() + " suit " +  matiereList.size() + " matiere(s).");
+            
+        }
+        catch(Exception ex) {
+            System.out.println("erreur calcule moyenne");
+        }
+    }
 
-    private void afficherMoyenneEleve(){}
+    private void afficherListeNoteEleveAvecDetails(){
+        try {
+            System.out.println("Merci de saisir l'id de l'étudiant : ");
+            Long etudiant_id = scanner.nextLong();
+            scanner.nextLine();
+            Etudiant etudiant = this.etudiantService.findById(etudiant_id);
 
-    private void afficherNombreEleveDepartement(){}
+            List<Note> noteList = noteService.findAll1(etudiant_id);
+            for (Note note: noteList) {
+                System.out.println(note.toString());
+            }
+        }
+        catch(Exception ex) {
+            System.out.println("erreur calcule moyenne");
+        }
+    }
 
-    private void afficherNomElevesNiveau(){}
+    private void afficherMoyenneEleve(){
+        try {
+        System.out.println("Merci de saisir l'id de l'étudiant : ");
+        Long etudiant_id = scanner.nextLong();
+        scanner.nextLine();
 
-    private void supprimerEleve(){}
+            System.out.println("La moyenne générale de l'étudiant est :" + noteService.moyenne(etudiant_id) + " /20 ");
+        }
+        catch(Exception ex) {
+            System.out.println("erreur calcule moyenne");
+        }
+
+    }
+
+    private void afficherNombreEleveDepartement(){
+        try{
+            System.out.println("Merci de saisir l'id du département :");
+            Long id_departement = scanner.nextLong();
+            scanner.nextLine();
+
+            Departement departement= this.departementService.findById(id_departement);
+            int nombre_eleve = departementService.afficherNombreEleveDepartement(id_departement);
+
+            System.out.println("Il y a " + nombre_eleve + " élève(s) dans le département " + departement.getNom_departement() );
+
+        }catch(Exception ex) {
+            ex.printStackTrace();
+            System.out.println("erreur calcul");
+        }
+
+    }
+
+    private void afficherNomElevesNiveau(){
+        try{
+            System.out.println("Merci de saisir le nom du niveau :");
+            String niveau = scanner.nextLine();
+
+            System.out.println("Ci dessous les noms des élèves dont le niveau est : " + niveau );
+            List<Etudiant> etudiantList = classeService.findAllStudientsByLevel(niveau);
+
+            for (Etudiant etudiant: etudiantList
+                 ) {
+                System.out.println("Le nom de l'élève : " + etudiant.getId() + " est : " + etudiant.getNom_etudiant());
+            }
+        }catch(Exception ex) {
+        System.out.println("erreur calcule moyenne");
+    }
+
+
+    }
+
+    private void supprimerEleve(){
+        System.out.println("Merci de saisir l'id de l'étudiant à supprimer: ");
+        Long id = scanner.nextLong();
+        scanner.nextLine();
+        Etudiant etudiant = etudiantService.findById(id);
+        etudiantService.delete(etudiant);
+    }
 
     private void suppressionClasse(){}
 

@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.entity.Classe;
 import org.example.entity.Departement;
 import org.example.entity.Etudiant;
 import org.example.interfaces.Repository;
@@ -27,7 +28,12 @@ public class DepartementService extends BaseService implements Repository<Depart
 
     @Override
     public boolean delete(Departement o) {
-        return false;
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.delete(o);
+        session.getTransaction().commit();
+        session.close();
+        return true;
     }
 
     @Override
@@ -44,6 +50,11 @@ public class DepartementService extends BaseService implements Repository<Depart
         return null;
     }
 
+    public List<Classe>getClassList(){
+        List<Classe>classeList = null;
+        return classeList;
+    }
+
     public void begin(){
         session = sessionFactory.openSession();
     }
@@ -54,4 +65,33 @@ public class DepartementService extends BaseService implements Repository<Depart
         //  session.close();
         sessionFactory.close();
     }
+
+
+    public int afficherNombreEleveDepartement(Long id) {
+        try {
+            Long id_departement = id;
+
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+
+            Departement departement = session.get(Departement.class, id_departement);
+            List<Classe> classeList = departement.getClasseList();
+
+            int nombre_eleve = 0;
+
+            for (Classe classe : classeList) {
+                // Force le chargement de la collection EtudiantList
+                classe.getEtudiantList().size();
+                nombre_eleve += classe.getEtudiantList().size();
+            }
+
+            session.getTransaction().commit();
+            return nombre_eleve;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
 }

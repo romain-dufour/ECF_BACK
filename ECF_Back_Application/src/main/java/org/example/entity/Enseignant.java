@@ -31,7 +31,7 @@ public class Enseignant {
 
     private int Age_enseignant;
 
-    private int Grade_enseignant;
+    private String Grade_enseignant;
 
 
     private  boolean Prof_principal;
@@ -42,7 +42,7 @@ public class Enseignant {
     public Enseignant() {
     }
 
-    public Enseignant(String nom_enseignant, String prenom_enseignant, int age_enseignant, int grade_enseignant, boolean prof_principal, boolean responsable_departement) {
+    public Enseignant(String nom_enseignant, String prenom_enseignant, int age_enseignant, String grade_enseignant, boolean prof_principal, boolean responsable_departement) {
         Nom_enseignant = nom_enseignant;
         Prenom_enseignant = prenom_enseignant;
         Age_enseignant = age_enseignant;
@@ -99,11 +99,11 @@ public class Enseignant {
         Age_enseignant = age_enseignant;
     }
 
-    public int getGrade_enseignant() {
+    public String getGrade_enseignant() {
         return Grade_enseignant;
     }
 
-    public void setGrade_enseignant(int grade_enseignant) {
+    public void setGrade_enseignant(String grade_enseignant) {
         Grade_enseignant = grade_enseignant;
     }
 

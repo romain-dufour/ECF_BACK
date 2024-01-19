@@ -1,6 +1,5 @@
 package org.example.entity;
 
-
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -11,7 +10,7 @@ import java.util.List;
 @Table
 public class Etudiant {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id_etudiant", nullable = false)
     private Long id;
 
@@ -47,6 +46,14 @@ public class Etudiant {
         Prenom_etudiant = prenom_etudiant;
         Date_naissance = date_naissance;
         Email = email;
+    }
+
+    public Etudiant(String nom_etudiant, String prenom_etudiant, Date date_naissance, String email, Classe classe) {
+        Nom_etudiant = nom_etudiant;
+        Prenom_etudiant = prenom_etudiant;
+        Date_naissance = date_naissance;
+        Email = email;
+        this.classe = classe;
     }
 
     public List<Note> getNoteList() {

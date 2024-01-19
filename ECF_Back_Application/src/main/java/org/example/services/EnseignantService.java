@@ -1,5 +1,7 @@
 package org.example.services;
 
+import org.example.entity.Classe;
+import org.example.entity.Emplois_du_temps;
 import org.example.entity.Enseignant;
 import org.example.interfaces.Repository;
 
@@ -26,12 +28,21 @@ public class EnseignantService extends BaseService implements Repository<Enseign
 
     @Override
     public boolean delete(Enseignant o) {
-        return false;
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.delete(o);
+        session.getTransaction().commit();
+        session.close();
+        return true;
     }
 
     @Override
     public Enseignant findById(Long id) {
-        return null;
+        Enseignant enseignant = null;
+        session = sessionFactory.openSession();
+        enseignant = (Enseignant) session.get(Enseignant.class, id);
+        session.close();
+        return enseignant;
     }
 
     @Override

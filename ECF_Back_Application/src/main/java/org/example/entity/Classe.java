@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "Classe")
 public class Classe {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id_classe", nullable = false)
     private Long id;
 
@@ -89,5 +89,15 @@ public class Classe {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Classe{" +
+                "id=" + id +
+                ", Nom_classe='" + Nom_classe + '\'' +
+                ", Niveau_classe='" + Niveau_classe + '\'' +
+                ", departement=" + departement +
+                '}';
     }
 }
